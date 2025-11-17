@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -34,7 +35,22 @@ class CreateTodoFragment : Fragment() {
         binding.btnAdd.setOnClickListener {
             val title = binding.txtTitle.text.toString()
             val notes =  binding.txtNotes.text.toString()
-            val todo = Todo(title,notes)
+
+            // cek radio group
+            /*if(binding.radioGroupPriority.checkedRadioButtonId == R.id.radioHigh){
+                priority = 3
+            } else if(binding.radioGroupPriority.checkedRadioButtonId == R.id.radioMedium){
+                priority = 2
+            } else {
+                priority = 1
+            }*/
+
+            var priority = 0
+            val radio = view.findViewById<RadioButton>(
+                        binding.radioGroupPriority.checkedRadioButtonId)
+            priority = radio.tag.toString().toInt()
+
+            val todo = Todo(title,notes, priority)
             viewmodel.addTodo(todo)
             Snackbar.make(it, "Todo created", Snackbar.LENGTH_SHORT).show()
             it.findNavController().popBackStack()

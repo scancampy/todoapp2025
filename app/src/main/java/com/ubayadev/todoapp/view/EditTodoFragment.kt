@@ -1,0 +1,47 @@
+package com.ubayadev.todoapp.view
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.ubayadev.todoapp.R
+import com.ubayadev.todoapp.databinding.FragmentCreateTodoBinding
+import com.ubayadev.todoapp.viewmodel.DetailViewModel
+
+
+class EditTodoFragment : Fragment() {
+    private lateinit var binding: FragmentCreateTodoBinding
+    private lateinit var viewmodel: DetailViewModel
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // init viewmodel
+        viewmodel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        binding.txtPageTitle.text = "Edit Todo"
+        binding.btnAdd.text = "Save Todo"
+
+        // baca uuid
+        val uuid = EditTodoFragmentArgs.fromBundle(requireArguments()).uuid
+        viewmodel.fetch(uuid)
+        observeViewModel()
+    }
+
+    fun observeViewModel() {
+        viewmodel.todoLD.observe(viewLifecycleOwner, Observer {
+            // update UI
+            binding.txtTitle.setText(it.title)
+            binding.txtNotes.setText(it.notes)
+        })
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentCreateTodoBinding.inflate(inflater, container,false)
+        return  binding.root
+    }
+}

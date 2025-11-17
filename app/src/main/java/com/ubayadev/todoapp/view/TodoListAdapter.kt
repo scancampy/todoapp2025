@@ -2,9 +2,11 @@ package com.ubayadev.todoapp.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.ubayadev.todoapp.databinding.TodoItemLayoutBinding
 import com.ubayadev.todoapp.model.Todo
+import androidx.navigation.findNavController
 
 class TodoListAdapter(val todoList:ArrayList<Todo>, val listener: TodoItemListener)
     : RecyclerView.Adapter<TodoListAdapter.TodoViewHolder>() {
@@ -27,6 +29,13 @@ class TodoListAdapter(val todoList:ArrayList<Todo>, val listener: TodoItemListen
             }
         }
         holder.binding.checkTask.isChecked = false
+
+        // navigate to edit todo
+        holder.binding.imgEdit.setOnClickListener {
+            val uuid = todoList[position].uuid
+            val action = TodoListFragmentDirections.actionEditTodoFragment(uuid)
+            it.findNavController().navigate(action)
+        }
     }
 
     override fun getItemCount() = todoList.size
